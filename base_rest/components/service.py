@@ -371,7 +371,12 @@ class BaseRestService(AbstractComponent):
                 # parameter for HTTP Post are given as a json document into the
                 # requestBody
                 path_info["requestBody"] = {
-                    "content": {"application/json": {"schema": json_input_schema}}
+                    "content": {
+                        "application/json": {
+                            "schema": json_input_schema},
+                        "application/x-www-form-urlencoded": {
+                            "schema": json_input_schema}
+                    }
                 }
                 path = "/" + name
                 if id_in_path_required:

@@ -114,12 +114,16 @@ class HttpRestRequest(HttpRequest):
         if self.httprequest.mimetype == "application/json":
             data = self.httprequest.get_data().decode(self.httprequest.charset)
             self.params = json.loads(data)
+
         else:
-            # We reparse the query_string in order to handle data structure
-            # more information on https://github.com/aventurella/pyquerystring
-            self.params = pyquerystring.parse(
-                self.httprequest.query_string.decode("utf-8")
-            )
+            # application/x-www-form-urlencoded already comes in the params field
+            # by default
+            if self.httprequest.mimetype != "application/x-www-form-urlencoded":
+                # We reparse the query_string in order to handle data structure
+                # more information on https://github.com/aventurella/pyquerystring
+                self.params = pyquerystring.parse(
+                    self.httprequest.query_string.decode("utf-8")
+                )
         self._determine_context_lang()
 
     def _determine_context_lang(self):
